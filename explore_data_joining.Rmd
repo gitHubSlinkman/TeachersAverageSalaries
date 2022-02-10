@@ -1,0 +1,70 @@
+---
+title: "expore_file_join_process"
+author: "Craig W. Slinkman"
+date: "2/7/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Objective of this document
+
+The Rmarkdown files explores the joining of the teacher salary data by state with the cost of living by state.
+
+## Set up R for analysis
+
+```{r}
+require( tidyverse )                     # I live in the tidyverse.
+require( here )                          # To simplify directory access.
+this_here <- here()                      # Find projecxt directory location.
+```
+
+## Read the techer salary data
+
+```{r}
+source <- file.path( this_here,
+                     "data",
+                    "TeacherSalaries2022.csv")
+Salaries <- read_csv( source ) %>% 
+              arrange( state )
+dim( Salaries )
+Salaries
+```
+
+## Read cost of living data
+
+```{r}
+source <- file.path( this_here,
+                     "data",
+                    "COLA.csv")
+Cola <- read_csv( source ) %>% 
+          select( state, cola ) %>% 
+              arrange( state )
+          
+dim( Cola )
+Cola
+```
+
+## Join the two files by state name
+
+```{r}
+Adjusted <-
+  inner_join( Salaries, 
+              Cola,
+              by = "state" )
+    
+Adjusted <- 
+  Adjusted %>%
+    mutate( adjustedTeacherPay = teacherPay / ( cola / 100 ))
+          
+Adjusted <-
+  Adjusted %>% 
+    mutate( adjustedTeacherPay / (cola / 100))
+
+dim( Adjusted )
+Adjusted
+
+```
+
