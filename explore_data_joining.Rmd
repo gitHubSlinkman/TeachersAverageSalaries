@@ -61,7 +61,8 @@ Adjusted <-
           
 Adjusted <-
   Adjusted %>% 
-    mutate( adjustedTeacherPay / (cola / 100))
+    mutate( adjustedTeacherPay / (cola / 100)) %>% 
+      select( state,teacherPay, adjustedTeacherPay )
 
 dim( Adjusted )
 Adjusted
